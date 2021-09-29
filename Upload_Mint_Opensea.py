@@ -27,8 +27,8 @@ def test_print_all_fealdst():  # DEBUG ONLY
     print("{0} {1}".format("file format:", file_format.get()))
 
     ###START###
-    # print("Welcome!!!!")
-    # print("Please choose your project folder(make sure the chrome driver is in it)")
+    print("Welcome!!!!")
+    print("Please choose your project folder(make sure the chrome driver is in it)")
     chrome_driver_path = chromdriver_path.name
     file_path = img_folder_path
     collection_link = collection_link_input.get()
