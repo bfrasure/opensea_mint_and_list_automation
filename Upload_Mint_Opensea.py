@@ -16,7 +16,7 @@ root.title("opensea uplode automation")
 
 
 # tests
-def test_print_all_fealdst():  # DEBUG ONLY
+def main_program_loop():  # DEBUG ONLY
     print("{0} {1}".format("img folder:", img_folder_path))
     print("{0} {1}".format("chromedriver:", chromdriver_path.name))
     print("{0} {1}".format("Collection link:", collection_link_input.get()))
@@ -179,9 +179,7 @@ def Name_change_chromdriver_button(chromdriver_path):
 
 
 # main gui inputs
-button_widget = tkinter.Button(
-    root, text="Start!", command=test_print_all_fealdst
-)  # DEBUG ONLY
+button_widget = tkinter.Button(root, text="Start!", command=main_program_loop)
 
 img_folder_input_button = tkinter.Button(
     root, height=3, width=60, text="Add img folder", command=img_folder_input
