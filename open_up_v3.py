@@ -19,10 +19,13 @@ from selenium.webdriver.support import expected_conditions as ExpectedConditions
 root = tk.Tk()
 root.withdraw()
 
+print("Please choose your project folder(make sure the chrome driver is in it)")
+project_path = filedialog.askdirectory()
+
 ##chromeoptions
 opt=Options()
 opt.add_experimental_option("debuggerAddress","localhost:8989")
-driver=webdriver.Chrome(executable_path="K:\\2021 Backups\\Coding\\Python projects\\chromedriver.exe", chrome_options=opt)
+driver=webdriver.Chrome(executable_path= projrct_path + "\\chromedriver.exe", chrome_options=opt)
 wait = WebDriverWait(driver, 60)  
 
 
@@ -34,7 +37,6 @@ def wait_for(code):
 def wait_xpath(code):
     wait.until(ExpectedConditions.presence_of_element_located(
         (By.XPATH, code)))
-
 
 
 ###START###
