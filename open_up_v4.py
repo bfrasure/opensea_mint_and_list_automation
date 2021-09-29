@@ -17,8 +17,7 @@ root = tkinter.Tk()
 root.title("opensea uplode automation")
 
 
-# tests
-def test_print_all_fealdst():  # DEBUG ONLY
+def test_print_all_fealdst(): 
     print("{0} {1}".format("img folder:", img_folder_path))
     print("{0} {1}".format("chromedriver:", chromdriver_path.name))
     print("{0} {1}".format("Collection link:", collection_link_input.get()))
