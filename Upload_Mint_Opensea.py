@@ -200,7 +200,7 @@ img_folder_input_button = tkinter.Button(
 )
 
 repo_save_loc_button = tkinter.Button(
-    root, height=3, width=60, text="Repo save location:", command=repo_save_loc_input
+    root, height=3, width=60, text="Repo save location: press open browser after you add this", command=repo_save_loc_input
 )
 
 collection_link_label = tkinter.Label(root, text="Collection_link:")
