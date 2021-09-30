@@ -1,5 +1,6 @@
 import os
 from os import name
+import subprocess
 import tkinter
 from tkinter import filedialog
 from selenium import webdriver
@@ -15,10 +16,22 @@ root = tkinter.Tk()
 root.title("opensea uplode automation")
 
 
+def open_chrome_profile():
+    subprocess.Popen(
+        [
+            "start",
+            "chrome",
+            "--remote-debugging-port=8989",
+            "--user-data-dir=" + repo_save_path + "/chrome_profile",
+        ],
+        shell=True,
+    )
+
+
 # tests
 def main_program_loop():  # DEBUG ONLY
     print("{0} {1}".format("img folder:", img_folder_path))
-    print("{0} {1}".format("chromedriver:", chromdriver_path.name))
+    print("{0} {1}".format("repo_save_path:", repo_save_path.name))
     print("{0} {1}".format("Collection link:", collection_link_input.get()))
     print("{0} {1}".format("start num:", int(start_num_input.get())))
     print("{0} {1}".format("uplode amount:", int(uplode_amount.get())))
@@ -29,7 +42,7 @@ def main_program_loop():  # DEBUG ONLY
     ###START###
     print("Welcome!!!!")
     print("Please choose your project folder(make sure the chrome driver is in it)")
-    chrome_driver_path = chromdriver_path.name
+    project_path = repo_save_path.name
     file_path = img_folder_path
     collection_link = collection_link_input.get()
     start_num = int(start_num_input.get())
@@ -42,7 +55,7 @@ def main_program_loop():  # DEBUG ONLY
     opt = Options()
     opt.add_experimental_option("debuggerAddress", "localhost:8989")
     driver = webdriver.Chrome(
-        executable_path=chrome_driver_path,
+        executable_path=project_path + "/chromedriver.exe",
         chrome_options=opt,
     )
     wait = WebDriverWait(driver, 60)
@@ -163,10 +176,10 @@ def img_folder_input():
     Name_change_img_folder_button(img_folder_path)
 
 
-def chromdriver_input():
-    global chromdriver_path
-    chromdriver_path = filedialog.askopenfile()
-    Name_change_chromdriver_button(chromdriver_path)
+def repo_save_loc_input():
+    global repo_save_path
+    repo_save_path = filedialog.askdirectory()
+    Name_change_chromdriver_button(repo_save_path)
 
 
 # chang gui test
@@ -174,19 +187,20 @@ def Name_change_img_folder_button(img_folder_input):
     img_folder_input_button["text"] = img_folder_input
 
 
-def Name_change_chromdriver_button(chromdriver_path):
-    chromedriver_button["text"] = chromdriver_path
+def Name_change_chromdriver_button(repo_save_path):
+    repo_save_loc_button["text"] = repo_save_path
 
 
 # main gui inputs
 button_widget = tkinter.Button(root, text="Start!", command=main_program_loop)
+open_browser = tkinter.Button(root, text="Open Browser", command=open_chrome_profile)
 
 img_folder_input_button = tkinter.Button(
     root, height=3, width=60, text="Add img folder", command=img_folder_input
 )
 
-chromedriver_button = tkinter.Button(
-    root, height=3, width=60, text="chromdriver:", command=chromdriver_input
+repo_save_loc_button = tkinter.Button(
+    root, height=3, width=60, text="Repo save location:", command=repo_save_loc_input
 )
 
 collection_link_label = tkinter.Label(root, text="Collection_link:")
@@ -217,7 +231,7 @@ file_format.insert(0, "")
 # Gui fichas posisons
 img_folder_input_button.grid(row=0, columnspan=2)
 
-chromedriver_button.grid(row=1, columnspan=2)
+repo_save_loc_button.grid(row=1, columnspan=2)
 
 collection_link_label.grid(row=2, column=0)
 collection_link_input.grid(row=2, column=1)
@@ -238,6 +252,7 @@ file_format_label.grid(row=7, column=0)
 file_format.grid(row=7, column=1)
 
 button_widget.grid(row=100, column=0)
+open_browser.grid(row=2, column=2)
 
 
 # End of script
