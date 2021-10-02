@@ -37,18 +37,9 @@ def open_chrome_profile():
 
 
 def main_program_loop():  # DEBUG ONLY
-    print("{0} {1}".format("img folder:", img_folder_path))
-    print("{0} {1}".format("repo_save_path:", repo_save_path))
-    print("{0} {1}".format("Collection link:", collection_link_input.get()))
-    print("{0} {1}".format("start num:", int(start_num_input.get())))
-    print("{0} {1}".format("uplode amount:", int(uplode_amount.get())))
-    print("{0} {1}".format("price:", float(price.get())))
-    print("{0} {1}".format("title:", title.get()))
-    print("{0} {1}".format("file format:", file_format.get()))
+    print("Main started")
 
     ###START###
-    print("Welcome!!!!")
-    print("Please choose your project folder(make sure the chrome driver is in it)")
     project_path = repo_save_path
     file_path = img_folder_path
     collection_link = collection_link_input.get()
@@ -180,7 +171,7 @@ def main_program_loop():  # DEBUG ONLY
 
 # gets path to save file in current working directory.
 def save_file_path():
-    return os.path.join(sys.path[0], "How_is_your_day_going.mb")
+    return os.path.join(sys.path[0], "How_is_your_day_going.ali")
 
 
 # saves GUI inputs to file.
