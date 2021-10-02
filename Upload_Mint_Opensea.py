@@ -1,21 +1,29 @@
-import os
-from os import name
-import subprocess
-import tkinter
+import tkinter, subprocess
 from tkinter import filedialog
+import os, sys, pickle, time
 from selenium import webdriver
-import time
-import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as ExpectedConditions
 
-##tkinter
 root = tkinter.Tk()
-root.title("opensea uplode automation")
+root.title("Opensea Uploade Automation")
+# _____TESTING_____
 
 
+def test_print_all_fealdst():  # DEBUG ONLY
+    print("{0} {1}".format("img folder:", img_folder_path))
+    print("{0} {1}".format("repo_save_path:", repo_save_path))
+    print("{0} {1}".format("Collection link:", collection_link_input.get()))
+    print("{0} {1}".format("start num:", int(start_num_input.get())))
+    print("{0} {1}".format("uplode amount:", int(uplode_amount.get())))
+    print("{0} {1}".format("price:", float(price.get())))
+    print("{0} {1}".format("title:", title.get()))
+    print("{0} {1}".format("file format:", file_format.get()))
+
+
+# _____MAIN_CODE_____
 def open_chrome_profile():
     subprocess.Popen(
         [
@@ -28,21 +36,11 @@ def open_chrome_profile():
     )
 
 
-# tests
 def main_program_loop():  # DEBUG ONLY
-    print("{0} {1}".format("img folder:", img_folder_path))
-    print("{0} {1}".format("repo_save_path:", repo_save_path.name))
-    print("{0} {1}".format("Collection link:", collection_link_input.get()))
-    print("{0} {1}".format("start num:", int(start_num_input.get())))
-    print("{0} {1}".format("uplode amount:", int(uplode_amount.get())))
-    print("{0} {1}".format("price:", float(price.get())))
-    print("{0} {1}".format("title:", title.get()))
-    print("{0} {1}".format("file format:", file_format.get()))
+    print("Main started")
 
     ###START###
-    print("Welcome!!!!")
-    print("Please choose your project folder(make sure the chrome driver is in it)")
-    project_path = repo_save_path.name
+    project_path = repo_save_path
     file_path = img_folder_path
     collection_link = collection_link_input.get()
     start_num = int(start_num_input.get())
@@ -169,7 +167,94 @@ def main_program_loop():  # DEBUG ONLY
         up_amount = up_amount - 1
 
 
-# comande for gui inputs
+# _____SAVE_____
+
+# gets path to save file in current working directory.
+def save_file_path():
+    return os.path.join(sys.path[0], "Save_file.ali")
+
+
+# saves GUI inputs to file.
+def Save():
+    thing_to_save_for_next_time = [
+        img_folder_path,
+        repo_save_path,
+        collection_link_input.get(),
+        start_num_input.get(),
+        int(uplode_amount.get()),
+        float(price.get()),
+        title.get(),
+        file_format.get(),
+    ]
+    with open(save_file_path(), "wb") as outfile:
+        pickle.dump(thing_to_save_for_next_time, outfile)
+
+
+# opens save file, sets of variables, changes text on GUI.
+def open_save():
+    try:
+        with open(save_file_path(), "rb") as infile:
+            new_dict = pickle.load(infile)
+            global img_folder_path
+            global repo_save_path
+            Name_change_img_folder_button(new_dict[0])
+            img_folder_path = new_dict[0]
+            Name_change_chromdriver_button(new_dict[1])
+            repo_save_path = new_dict[1]
+            collection_link_input_save(new_dict[2])
+            start_num__save(new_dict[3])
+            uplode_amount_save(new_dict[4])
+            price_save(new_dict[5])
+            title_save(new_dict[6])
+            file_format_save(new_dict[7])
+    except FileNotFoundError:
+        pass
+
+
+# _____TEXT_CHANGERS_____
+
+# adds text to enter element.
+def collection_link_input_save(collection_link_from_save):
+    collection_link_input.delete(0, "end")
+    collection_link_input.insert(0, collection_link_from_save)
+
+
+def start_num__save(start_num_from_save):
+    start_num_input.delete(0, "end")
+    start_num_input.insert(0, start_num_from_save)
+
+
+def uplode_amount_save(uplode_amount_from_save):
+    uplode_amount.delete(0, "end")
+    uplode_amount.insert(0, uplode_amount_from_save)
+
+
+def price_save(price_from_save):
+    price.delete(0, "end")
+    price.insert(0, price_from_save)
+
+
+def file_format_save(file_format_from_save):
+    file_format.delete(0, "end")
+    file_format.insert(0, file_format_from_save)
+
+
+def title_save(title_from_save):
+    title.delete(0, "end")
+    title.insert(0, title_from_save)
+
+
+# changes the name of Button to path.
+def Name_change_img_folder_button(img_folder_input):
+    img_folder_input_button["text"] = img_folder_input
+
+
+def Name_change_chromdriver_button(repo_save_path):
+    repo_save_loc_button["text"] = repo_save_path
+
+
+# _____ASK_DIR_____
+# ask for directory on clicking button, changes button name.
 def img_folder_input():
     global img_folder_path
     img_folder_path = filedialog.askdirectory()
@@ -182,27 +267,30 @@ def repo_save_loc_input():
     Name_change_chromdriver_button(repo_save_path)
 
 
-# chang gui test
-def Name_change_img_folder_button(img_folder_input):
-    img_folder_input_button["text"] = img_folder_input
+# _____INPUTS_____
+# Button inputs
+"""
+TEST_BUTTON = tkinter.Button(
+    root, text="Test all", command=test_print_all_fealdst
+)  # DEBUG ONLY
+"""
 
+button_save = tkinter.Button(root, text="Save", command=Save)
 
-def Name_change_chromdriver_button(repo_save_path):
-    repo_save_loc_button["text"] = repo_save_path
+button_start = tkinter.Button(root, text="Start", command=main_program_loop)
 
-
-# main gui inputs
-button_widget = tkinter.Button(root, text="Start!", command=main_program_loop)
 open_browser = tkinter.Button(root, text="Open Browser", command=open_chrome_profile)
 
 img_folder_input_button = tkinter.Button(
-    root, height=3, width=60, text="Add img folder", command=img_folder_input
+    root, height=3, width=60, text="Add Upload Folder", command=img_folder_input
 )
 
 repo_save_loc_button = tkinter.Button(
-    root, height=3, width=60, text="Repo save location: press open browser after you add this", command=repo_save_loc_input
+    root, height=3, width=60, text="Repo save location:", command=repo_save_loc_input
 )
 
+
+# text inputs
 collection_link_label = tkinter.Label(root, text="Collection_link:")
 collection_link_input = tkinter.Entry(root)
 collection_link_input.insert(0, "")
@@ -228,13 +316,14 @@ file_format = tkinter.Entry(root)
 file_format.insert(0, "")
 
 
-# Gui fichas posisons
-img_folder_input_button.grid(row=0, columnspan=2)
+# _____GUI_LAYOUT_____
+img_folder_input_button.grid(row=0, columnspan=3)
 
-repo_save_loc_button.grid(row=1, columnspan=2)
+repo_save_loc_button.grid(row=1, columnspan=3)
 
 collection_link_label.grid(row=2, column=0)
 collection_link_input.grid(row=2, column=1)
+open_browser.grid(row=2, column=2)
 
 start_num_input_label.grid(row=3, column=0)
 start_num_input.grid(row=3, column=1)
@@ -251,9 +340,11 @@ title.grid(row=6, column=1)
 file_format_label.grid(row=7, column=0)
 file_format.grid(row=7, column=1)
 
-button_widget.grid(row=100, column=0)
-open_browser.grid(row=2, column=2)
+button_start.grid(row=8, column=1)
 
+button_save.grid(row=8, column=2)
 
-# End of script
+# TEST_BUTTON.grid(row=100, column=0)  # DEBUG ONLY
+
+open_save()
 root.mainloop()
